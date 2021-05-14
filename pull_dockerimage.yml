@@ -1,0 +1,10 @@
+---
+- name: test
+  hosts: webservers
+  tasks:
+  - name: Pull an image
+      name: pacur/centos-7
+      source: pull
+      pull:
+        platform: amd64
+

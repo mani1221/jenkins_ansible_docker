@@ -1,0 +1,8 @@
+---
+- name: install httpd image
+  hosts: webservers
+  tasks:
+    - name: Pull an image
+      docker_image:
+         name: httpd
+         source: pull

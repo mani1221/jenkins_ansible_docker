@@ -1,0 +1,20 @@
+--- 
+- 
+  hosts: webservers
+  name: "start docker container"
+  tasks: 
+    - 
+      docker_container: 
+        exposed_ports: 
+          - "0"
+        image: httpd
+        name: httpd
+        ports: 
+          - "8888:80"
+        state: started
+      name: "httpd container"
+    - 
+      copy:
+         src: index.html
+         dest: /var/www/html/index.html
+

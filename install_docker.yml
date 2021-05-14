@@ -1,0 +1,76 @@
+---
+-
+  gather_facts: false
+  hosts: webservers
+  name: "Install docker"
+  tasks:
+    -
+      name: "Install yum utils"
+      yum:
+        name: yum-utils
+        state: latest
+    -
+      name: "Install device-mapper-persistent-data"
+      yum:
+        name: device-mapper-persistent-data
+        state: latest
+    -
+      name: "Install lvm2"
+      yum:
+        name: lvm2
+        state: latest
+    -
+      become: true
+      get_url:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        url: "https://download.docker.com/linux/centos/docker-ce.repo"
+      name: "Add Docker repo"
+    -
+      become: true
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        option: enabled
+        section: docker-ce-edge
+        value: 0
+      name: "Enable Docker Edge repo"
+    -
+      become: true
+      ini_file:
+        dest: /etc/yum.repos.d/docer-ce.repo
+        option: enabled
+        section: docker-ce-test
+        value: 0
+      name: "Enable Docker Test repo"
+    -
+      become: true
+      name: "pip"
+      package:
+        name: python3-pip
+        state: latest
+    -
+      become: true
+      name: "docker ce"
+      package:
+        name: docker-ce
+        state: present
+    -
+      become: true
+      name: "Install Docker"
+      package:
+        name: docker
+        state: absent
+    -
+      become: true
+      name: "Start Docker service"
+      service:
+        enabled: true
+        name: docker
+        state: started
+    -
+      become: true
+      name: "Add user vagrant to docker group"
+      user:
+        append: true
+        groups: docker
+        name: vagrant
+
