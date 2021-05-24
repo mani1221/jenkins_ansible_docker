@@ -1,7 +1,15 @@
 ---
-- name: test
-  hosts: all
-  tasks: 
-    - 
-      action: ping
-      name: ping
+- hosts: all
+  become: true
+  tasks:
+    - name: "Check if APACHE is installed"
+      package_facts:
+        manager: "auto"
+    - name: "Apache result"
+      debug:
+         msg: "Apache found"
+      when: "'httpd' in ansible_facts.packages"
+    - name: "Apache result"
+      debug:
+         msg: "Apache NOT found"
+      when: "'httpd' not in ansible_facts.packages"
